@@ -1,4 +1,4 @@
-package sec01.ex01;
+package sec02.ex02;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -77,6 +77,64 @@ public class MemberDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}	
+	}
+	
+	public MemberVO findMember(String _id) {
+		MemberVO memInfo = null;
+		try {
+			conn = dFact.getConnection();
+			String sql = "select * from t_member where id=?";
+			pst=conn.prepareStatement(sql);
+			pst.setString(1, _id);
+			System.out.println(sql);
+			ResultSet rs = pst.executeQuery();
+			rs.next();
+			String id= rs.getString("id");
+			String pwd= rs.getString("pwd");
+			String name= rs.getString("name");
+			String email= rs.getString("email");
+			Date joinDate = rs.getDate("joinDate");
+			memInfo = new MemberVO(id, pwd, name, email, joinDate);
+			MemberVO memberVO = new MemberVO(id, pwd, name, email, joinDate);
+			pst.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return memInfo;
+	}
+	
+	public void modMember(MemberVO memberVO) {
+		String id = memberVO.getId();
+		String pwd = memberVO.getPwd();
+		String name = memberVO.getName();
+		String email = memberVO.getEmail();
+		try {
+			conn = dFact.getConnection();
+			String sql = "UPDATE t_member set pwd=?, name=?, email=? where id=?";
+			System.out.println(sql);
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, pwd);
+			pst.setString(2, name);
+			pst.setString(3, email);
+			pst.setString(4, id);
+			pst.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void delMember(String id) {
+		try {
+			conn=dFact.getConnection();
+			String sql = "DELETE FROM t_member where id=?";
+			System.out.println(sql);
+			pst=conn.prepareStatement(sql);
+			pst.setString(1, id);
+			pst.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
 
