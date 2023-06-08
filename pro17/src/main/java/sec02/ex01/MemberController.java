@@ -22,7 +22,7 @@ public class MemberController extends HttpServlet {
 	public void init() throws ServletException {
 		memberDAO = new MemberDAO();
 	}
-
+ 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doHandle(request, response);
 	}
