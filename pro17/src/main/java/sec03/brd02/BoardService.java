@@ -16,6 +16,6 @@ public class BoardService {
 	}
 	
 	public void addArticle(ArticleVO articleVO) {
-		
+		boardDAO.insertNewArticle(articleVO);
 	}
 }
