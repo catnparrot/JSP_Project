@@ -65,5 +65,46 @@ public class BoardDAO {
 		return articlesList;
 	}
 	
+	private int getNewArticleNO() {
+		try {
+			conn = dFact.getConnection();
+			String sql = "SELECT max(articleNO) ROM t_board";
+			System.out.println(sql);
+			pst = conn.prepareStatement(sql);
+			ResultSet rs = pst.executeQuery();
+			if(rs.next())
+				return(rs.getInt(1) + 1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public void insertNewArticle(ArticleVO article) {
+		try {
+			conn=dFact.getConnection();
+			int articleNO = getNewArticleNO();
+			int parentNO = article.getParentNO();
+			String title = article.getTitle();
+			String content = article.getContent();
+			String id = article.getId();
+			String imageFileName = article.getImageFileName();
+			String sql = "INSERT INTO t_board (articleNO, parentNO, title, content, imageFileName, id)"
+					+ " VALUES (?, ?, ?, ?, ?, ?)";
+			System.out.println(sql);
+			pst = conn.prepareStatement(sql);
+			pst.setInt(1, articleNO);
+			pst.setInt(2, parentNO);
+			pst.setString(3, title);
+			pst.setString(4, content);
+			pst.setString(5, imageFileName);
+			pst.setString(6, id);
+			pst.executeUpdate();
+			pst.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 }

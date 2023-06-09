@@ -16,13 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 /**
  * Servlet implementation class BoardController
  */
-@WebServlet("/board/*")
+@WebServlet("/board2/*")
 public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static String ARTICLE_IMAGE_REPO = "C:\\board\\article_image";
@@ -31,6 +32,7 @@ public class BoardController extends HttpServlet {
 	
 	public void init(ServletConfig config) throws ServletException {
 		boardService = new BoardService();
+		articleVO = new ArticleVO();
 		System.out.println("===>init called");
 	}
 
@@ -54,11 +56,11 @@ public class BoardController extends HttpServlet {
 			if(action==null) {
 				articlesList = boardService.listArticles();
 				request.setAttribute("articlesList", articlesList);
-				nextPage = "/board01/listArticles.jsp";
-			}else if(action.equals("/listArticles.do")) {
+				nextPage = "/board02/listArticles.jsp";
+			}else if(action.equals("/listArticle.do")) {
 				articlesList = boardService.listArticles();
 				request.setAttribute("articlesList", articlesList);
-				nextPage = "/board01/listArticles.jsp";
+				nextPage = "/board02/listArticles.jsp";
 			}else if(action.equals("/articleForm.do")) {
 				nextPage = "/board02/articleForm.jsp";
 			}else if(action.equals("/addArticle.do")) {
@@ -73,16 +75,17 @@ public class BoardController extends HttpServlet {
 				articleVO.setContent(content);
 				articleVO.setImageFileName(imageFileName);
 				boardService.addArticle(articleVO);
-				nextPage="/board/listArticles.do";
+				nextPage = "/board2/listArticle.do";
 			}
+			
 			RequestDispatcher dispatch = request.getRequestDispatcher(nextPage);
 			dispatch.forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	private Map<String, String> upload(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+
+	private Map<String, String> upload(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Map<String, String> articleMap = new HashMap<String, String>();
 		String encoding = "utf-8";
 		File currentDirPath = new File(ARTICLE_IMAGE_REPO);
@@ -94,16 +97,15 @@ public class BoardController extends HttpServlet {
 			List items = upload.parseRequest(request);
 			for (int i = 0; i < items.size(); i++) {
 				FileItem fileItem = (FileItem) items.get(i);
-				if(fileItem.isFormField()) {	//if1
+				if(fileItem.isFormField()) {
 					System.out.println(fileItem.getFieldName()
-							+""+fileItem.getString(encoding));
+								+ "=" + fileItem.getString(encoding));
 					articleMap.put(fileItem.getFieldName(), fileItem.getString(encoding));
-				}else {	//else if1
-					System.out.println("파라미터 이름:" + fileItem.getFieldName());
+				} else {
+					System.out.println("파라미터이름:" + fileItem.getFieldName());
 					System.out.println("파일이름:" + fileItem.getName());
 					System.out.println("파일크기:" + fileItem.getSize() + "bytes");
-					
-					if(fileItem.getSize()>0) {	//if2
+					if(fileItem.getSize() > 0) {
 						int idx = fileItem.getName().lastIndexOf("\\");
 						if(idx == -1) {
 							idx = fileItem.getName().lastIndexOf("/");
@@ -113,15 +115,13 @@ public class BoardController extends HttpServlet {
 						articleMap.put(fileItem.getFieldName(), fileName);
 						File uploadFile = new File(currentDirPath + "\\" + fileName);
 						fileItem.write(uploadFile);
-					}	//end if2
-				}	//end if1
-			}	//end for
+					}
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return articleMap;
 	}
-
 
 }
