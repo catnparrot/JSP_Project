@@ -68,7 +68,7 @@ public class BoardDAO {
 	private int getNewArticleNO() {
 		try {
 			conn = dFact.getConnection();
-			String sql = "SELECT max(articleNO) ROM t_board";
+			String sql = "SELECT max(articleNO) FROM t_board";
 			System.out.println(sql);
 			pst = conn.prepareStatement(sql);
 			ResultSet rs = pst.executeQuery();
