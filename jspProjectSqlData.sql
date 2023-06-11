@@ -67,3 +67,14 @@ SELECT LEVEL,
 		START WITH parentNO=0
 		CONNECT BY PRIOR articleNO=parentNO
 		ORDER siblings BY articleNO DESC;
+
+
+
+DELETE FROM t_board
+WHERE articleNO IN (
+	SELECT articleNO FROM t_board
+	START WITH articleNO=2
+	CONNECT BY PRIOR articleNO = parentNO
+);
+
+DROP TABLE T_BOARD;
