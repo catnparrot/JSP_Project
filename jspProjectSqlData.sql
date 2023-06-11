@@ -77,4 +77,33 @@ WHERE articleNO IN (
 	CONNECT BY PRIOR articleNO = parentNO
 );
 
-DROP TABLE T_BOARD;
+
+SELECT * FROM (
+			SELECT ROWNUM AS recNum,
+						LVL,
+						articleNO,
+						parentNO,
+						title,
+						content,
+						id,
+						writedate
+						FROM (
+								SELECT LEVEL AS LVL,
+										articleNO,
+										parentNO,
+										title,
+										content,
+										id,
+										writedate
+									FROM t_board
+								START WITH parentNO=0
+								CONNECT BY PRIOR articleNO=parentNO
+									ORDER SIBLINGS BY articleNO DESC						
+						)
+				)
+WHERE recNum BETWEEN 1 AND 10;
+-- recNum BETWEEN(SECTION-1)*100+(pageNum-1)*10+1 AND (SECTION-1)*100+pageNum*10;
+-- recNum BETWEEN 1 AND 10; -- <-section 값이 1이고 pageNum값이 1인 경우
+
+
+-- DROP TABLE T_BOARD;
