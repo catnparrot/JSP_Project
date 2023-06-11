@@ -14,7 +14,7 @@
 	<script  src="http://code.jquery.com/jquery-latest.min.js"></script> 
 	<script>		
 		function backToList(obj) {
-			obj.action = "${contextPath}/board7/listArticle.do";
+			obj.action = "${contextPath}/board8/listArticle.do";
 			obj.submit();
 		}
 		
@@ -32,7 +32,7 @@
 </head>
 <body>
     <h1 sytle="text-align:center">답글쓰기</h1>
-        <form name="frmReply" method="post" action="${contextPath}/board7/addReply.do" enctype="multipart/form-data">
+        <form name="frmReply" method="post" action="${contextPath}/board8/addReply.do" enctype="multipart/form-data">
             <table align="center">
                 <tr>
                     <td align="right"> 글쓴이:&nbsp; </td>
