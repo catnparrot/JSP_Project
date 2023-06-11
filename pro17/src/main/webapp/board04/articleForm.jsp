@@ -23,7 +23,7 @@
 		}
 	}
 	function backToList(obj) {
-		obj.action = "${contextPath}/board3/listArticle.do";
+		obj.action = "${contextPath}/board5/listArticle.do";
 		obj.submit();
 	}
 </script>
@@ -32,7 +32,7 @@
 <body>
     <h1 style="text-align: center;">새 글 쓰기</h1>
     <form name="articleForm" method="post" 
-                            action="${contextPath}/board3/addArticle.do"
+                            action="${contextPath}/board5/addArticle.do"
                             enctype="multipart/form-data" >
         <table border="0" align="center">
             <tr>

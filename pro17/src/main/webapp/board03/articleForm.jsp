@@ -23,7 +23,7 @@
 		}
 	}
 	function backToList(obj) {
-		obj.action = "${contextPath}/board4/listArticles.do";
+		obj.action = "${contextPath}/board4/listArticle.do";
 		obj.submit();
 	}
 </script>
@@ -52,7 +52,7 @@
                 <td align="right"> </td>
                 <td colspan="2">
                 	<input type="submit" value="글쓰기" />
-                	<input type=button value="목록보기" onclick="backToLists(this.form)" />
+                	<input type=button value="목록보기" onclick="backToList(this.form)" />
                 </td>
             </tr>
         </table>
